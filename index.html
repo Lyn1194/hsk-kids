@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn Mandarin the fun way! Kid-friendly Chinese app for ages 5–10." />
+  <meta name="theme-color" content="#4C6EF5" />
+  <title>🐼 HSK Kids – Learn Mandarin</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="manifest" href="./manifest.json" />
+  <!-- Favicon as data URI to avoid external dependency -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐼</text></svg>" />
+</head>
+<body>
+
+  <!-- ── Offline banner ─────────────────────────────────────────────────── -->
+  <div id="offline-banner" role="status">📶 You're offline – app still works!</div>
+
+  <!-- ── Global feedback bar ─────────────────────────────────────────────── -->
+  <div id="feedback-bar" class="feedback-bar" role="status" aria-live="polite"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SCREEN 1 · Track Selection
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section id="screen-track" class="screen" aria-label="Choose your learning track">
+    <div class="logo">🐼</div>
+    <h2>HSK Kids</h2>
+    <p>Choose your learning track to get started!</p>
+
+    <div class="track-cards">
+      <!-- Pre-reader -->
+      <button id="btn-track-prereader" class="track-card" aria-label="Pre-reader track for ages 5 to 7">
+        <span class="card-emoji">🎈</span>
+        <h3>Pre-reader</h3>
+        <span class="age-badge">Ages 5–7</span>
+        <p>Audio &amp; emoji focus. Minimal text, maximum fun!</p>
+      </button>
+
+      <!-- Reader -->
+      <button id="btn-track-reader" class="track-card" aria-label="Reader track for ages 8 to 10">
+        <span class="card-emoji">📚</span>
+        <h3>Reader</h3>
+        <span class="age-badge">Ages 8–10</span>
+        <p>See Chinese characters, pinyin &amp; English together.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SCREEN 2 · Theme Selection
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section id="screen-themes" class="screen" aria-label="Choose a theme">
+    <!-- Total stars bar -->
+    <div id="total-stars-bar" class="total-stars-bar">⭐ Total Stars: 0</div>
+
+    <!-- Top bar -->
+    <div class="top-bar">
+      <h1>🐼 HSK Kids</h1>
+      <button id="btn-parent-from-themes" class="btn-icon" aria-label="Open Parent Corner">⚙️</button>
+    </div>
+
+    <div id="themes-grid" class="themes-grid" role="list" aria-label="Learning themes"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SCREEN 3 · Activity Selection
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section id="screen-activity-select" class="screen" aria-label="Choose an activity">
+    <div class="top-bar">
+      <button id="btn-back-activity-select" class="btn-icon" aria-label="Back to themes">←</button>
+      <h1 id="activity-select-title">Choose Activity</h1>
+      <span style="width:40px"></span>
+    </div>
+
+    <div class="activity-list">
+      <button id="btn-act-tap" class="activity-btn" aria-label="Tap the Picture activity">
+        <span class="act-icon">👆</span>
+        <div>
+          <div>Tap the Picture</div>
+          <div class="act-desc">4 choices – tap the correct emoji</div>
+        </div>
+      </button>
+
+      <button id="btn-act-listen" class="activity-btn" aria-label="Listen and Find activity">
+        <span class="act-icon">👂</span>
+        <div>
+          <div>Listen &amp; Find</div>
+          <div class="act-desc">Hear the word – find it in the grid</div>
+        </div>
+      </button>
+
+      <button id="btn-act-flash" class="activity-btn" aria-label="Flashcards activity">
+        <span class="act-icon">🃏</span>
+        <div>
+          <div>Flashcards</div>
+          <div class="act-desc">Tap to reveal – hear the Chinese</div>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SCREEN 4 · Activity (dynamic content injected by app.js)
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section id="screen-activity" class="screen" aria-label="Activity">
+    <div class="top-bar">
+      <button id="btn-back-activity" class="btn-icon" aria-label="Back to activity selection">←</button>
+      <h1 id="activity-bar-title">Activity</h1>
+      <button id="btn-parent-from-activity" class="btn-icon" aria-label="Open Parent Corner">⚙️</button>
+    </div>
+
+    <div id="activity-area" class="activity-area"></div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SCREEN 5 · Parent Corner
+       ══════════════════════════════════════════════════════════════════════ -->
+  <section id="screen-parent" class="screen" aria-label="Parent Corner settings">
+    <div class="top-bar">
+      <button id="btn-back-parent" class="btn-icon" aria-label="Back">←</button>
+      <h1>⚙️ Parent Corner</h1>
+      <span style="width:40px"></span>
+    </div>
+
+    <div class="settings-list">
+      <!-- Current track info -->
+      <div class="setting-row">
+        <label>
+          <span>Current Track</span>
+          <span class="setting-desc">Active learning mode</span>
+        </label>
+        <span id="parent-track-label" style="font-weight:700">–</span>
+      </div>
+
+      <!-- Track switch -->
+      <div class="setting-row" style="flex-direction:column; align-items:flex-start; gap:10px;">
+        <label>
+          <span>Switch Track</span>
+          <span class="setting-desc">Change the learning mode</span>
+        </label>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button id="btn-switch-prereader" class="btn btn-secondary" style="min-width:130px;">🎈 Pre-reader</button>
+          <button id="btn-switch-reader"    class="btn btn-primary"   style="min-width:130px;">📚 Reader</button>
+        </div>
+      </div>
+
+      <!-- Sound toggle -->
+      <div class="setting-row">
+        <label for="toggle-sound">
+          <span>🔊 Sound</span>
+          <span class="setting-desc">Enable audio &amp; speech</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-sound" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <!-- Show English -->
+      <div class="setting-row">
+        <label for="toggle-english">
+          <span>🇬🇧 Show English</span>
+          <span class="setting-desc">Display English translation</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-english" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <!-- Show Chinese -->
+      <div class="setting-row">
+        <label for="toggle-chinese">
+          <span>🀄 Show Chinese</span>
+          <span class="setting-desc">Display Chinese characters</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-chinese" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <!-- Show Pinyin -->
+      <div class="setting-row">
+        <label for="toggle-pinyin">
+          <span>🔤 Show Pinyin</span>
+          <span class="setting-desc">Display pinyin pronunciation</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-pinyin" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <!-- Speech speed -->
+      <div class="setting-row">
+        <label for="speed-slider">
+          <span>🐢 Speech Speed</span>
+          <span class="setting-desc">Adjust voice speed</span>
+        </label>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <input type="range" id="speed-slider" class="speed-slider"
+                 min="0.5" max="1.5" step="0.1" value="1.0"
+                 aria-label="Speech speed" />
+          <span id="speed-label" style="width:36px; font-weight:700; font-size:.9rem;">1.0×</span>
+        </div>
+      </div>
+
+      <!-- Stars count -->
+      <div class="setting-row">
+        <label>
+          <span>⭐ Total Stars</span>
+          <span class="setting-desc">Your progress so far</span>
+        </label>
+        <span id="parent-stars" style="font-size:1.4rem; font-weight:800;">⭐ 0</span>
+      </div>
+
+      <!-- Reset progress -->
+      <div class="setting-row">
+        <label>
+          <span>🔄 Reset Progress</span>
+          <span class="setting-desc">Clear all stars and progress</span>
+        </label>
+        <button id="btn-reset" class="btn danger" style="padding:10px 18px;">Reset</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Scripts ──────────────────────────────────────────────────────────── -->
+  <script src="./themes.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
